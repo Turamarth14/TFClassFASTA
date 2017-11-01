@@ -1,0 +1,29 @@
+package BioinformatikGoettingen.TFClassFASTA;
+
+import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+
+public class TFClassFASTAApplication extends Application<TFClassFASTAConfiguration> {
+
+    public static void main(final String[] args) throws Exception {
+        new TFClassFASTAApplication().run(args);
+    }
+
+    @Override
+    public String getName() {
+        return "TFClassFASTA";
+    }
+
+    @Override
+    public void initialize(final Bootstrap<TFClassFASTAConfiguration> bootstrap) {
+        // TODO: application initialization
+    }
+
+    @Override
+    public void run(final TFClassFASTAConfiguration configuration,
+                    final Environment environment) {
+        // TODO: implement application
+    }
+
+}
