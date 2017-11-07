@@ -2,7 +2,9 @@ package BioinformatikGoettingen.TFClassFASTA;
 
 import com.google.common.base.Charsets;
 
-import BioinformatikGoettingen.TFClassFASTA.api.Fasta;
+import BioinformatikGoettingen.TFClassFASTA.core.Fasta;
+import BioinformatikGoettingen.TFClassFASTA.db.FastaDAO;
+import BioinformatikGoettingen.TFClassFASTA.resources.FastaResource;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundleConfiguration;
 import io.dropwizard.Application;
@@ -45,7 +47,8 @@ public class TFClassFASTAApplication extends Application<TFClassFASTAConfigurati
     @Override
     public void run(final TFClassFASTAConfiguration configuration,
                     final Environment environment) {
-        // TODO: implement application
+        final FastaDAO fastaDAO = new FastaDAO(hibernate.getSessionFactory());
+        environment.jersey().register(new FastaResource(fastaDAO,environment));
     }
 
 }

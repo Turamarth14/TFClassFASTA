@@ -1,12 +1,18 @@
-package BioinformatikGoettingen.TFClassFASTA.api;
+package BioinformatikGoettingen.TFClassFASTA.core;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Fasta.getByUID", query = "SELECT fst FROM "
+            + "Fasta fst WHERE fst.UID = :UID")
+})
 public class Fasta {
 	
     @Id
@@ -21,6 +27,10 @@ public class Fasta {
     private String version;
     private String header;
     private String tfclassID;
+    
+    public Fasta() {
+    	
+    }
     
     public Long getUID() {
 		return UID;
