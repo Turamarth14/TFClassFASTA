@@ -111,4 +111,8 @@ public class Fasta {
     	    return "";
     	}
     }
+	
+	public String toFile() {
+		return this.header + "\n" + this.sequence;
+	}
 }

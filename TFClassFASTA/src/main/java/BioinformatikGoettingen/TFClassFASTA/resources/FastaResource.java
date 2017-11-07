@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import BioinformatikGoettingen.TFClassFASTA.core.Fasta;
 import BioinformatikGoettingen.TFClassFASTA.db.FastaDAO;
@@ -29,5 +30,17 @@ public class FastaResource {
 	@UnitOfWork
 	public Fasta getFasta(@PathParam(value = "UID") LongParam UID) {
 		return fastaDAO.getByUID(UID.get());
+	}
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("File/{UID}")
+	@UnitOfWork
+	public Response getFile(@PathParam(value = "UID") LongParam UID) {
+		Fasta fasta = fastaDAO.getByUID(UID.get());
+		String data = fasta.toFile();
+		return Response.ok(data, MediaType.TEXT_PLAIN)
+				.header("Content-Disposition", "attachment; filename=\"" + fasta.getUID() + "\"")
+				.build();
 	}
 }
