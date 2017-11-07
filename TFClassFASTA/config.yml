@@ -1,3 +1,14 @@
+# Database settings.
+database:
+    # the name of the JDBC driver, mysql in our case
+    driverClass: org.sqlite.jdbc
+    # the username
+    user: tfadmin
+    # the password
+    password: test123456
+    # the JDBC URL
+    url: jdbc:sqlite:fastadb.sqlite
+
 logging:
   level: INFO
   loggers:

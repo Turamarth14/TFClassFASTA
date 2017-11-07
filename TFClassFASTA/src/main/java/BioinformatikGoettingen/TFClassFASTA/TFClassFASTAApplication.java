@@ -1,6 +1,8 @@
 package BioinformatikGoettingen.TFClassFASTA;
 
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -17,7 +19,12 @@ public class TFClassFASTAApplication extends Application<TFClassFASTAConfigurati
 
     @Override
     public void initialize(final Bootstrap<TFClassFASTAConfiguration> bootstrap) {
-        // TODO: application initialization
+        bootstrap.addBundle(new MigrationsBundle<TFClassFASTAConfiguration>() {
+			@Override
+			public DataSourceFactory getDataSourceFactory(TFClassFASTAConfiguration configuration) {
+				return configuration.getDataSourceFactory();
+			}        	
+        });
     }
 
     @Override
