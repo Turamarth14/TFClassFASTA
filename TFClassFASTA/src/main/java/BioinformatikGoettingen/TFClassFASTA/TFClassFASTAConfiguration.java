@@ -3,6 +3,10 @@ package BioinformatikGoettingen.TFClassFASTA;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.validation.Valid;
 import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.*;
@@ -41,6 +45,9 @@ public class TFClassFASTAConfiguration extends Configuration {
     
     @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
+    	Map<String,String> s = new HashMap<String,String>();
+    	s.put("hibernate.dialect", "org.hibernate.dialect.SQLiteDialect");
+    	database.setProperties(s);
         return database;
     }
 }

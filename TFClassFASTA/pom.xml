@@ -23,7 +23,12 @@
         <junit.version>4.12</junit.version>
         <mainClass>BioinformatikGoettingen.TFClassFASTA.TFClassFASTAApplication</mainClass>
     </properties>
-
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
     <dependencies>
         <dependency>
@@ -70,6 +75,11 @@
         	<groupId>io.dropwizard</groupId>
         	<artifactId>dropwizard-migrations</artifactId>
         	<version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>com.github.gwenn</groupId>
+        	<artifactId>sqlite-dialect</artifactId>
+        	<version>master</version>
         </dependency>
     </dependencies>
 
