@@ -9,15 +9,11 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.constraints.*;
 
-<<<<<<< HEAD
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-=======
->>>>>>> branch 'master' of https://github.com/Turamarth14/TFClassFASTA.git
 
 public class TFClassFASTAConfiguration extends Configuration {
     @Valid
-<<<<<<< HEAD
     @NotNull
     @JsonProperty("database")
     private DataSourceFactory database = new DataSourceFactory();
