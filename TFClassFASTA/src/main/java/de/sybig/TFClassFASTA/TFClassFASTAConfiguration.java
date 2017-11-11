@@ -1,4 +1,4 @@
-package BioinformatikGoettingen.TFClassFASTA;
+package de.sybig.TFClassFASTA;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;

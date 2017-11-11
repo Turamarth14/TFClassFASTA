@@ -1,4 +1,4 @@
-package BioinformatikGoettingen.TFClassFASTA.resources;
+package de.sybig.TFClassFASTA.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,8 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import BioinformatikGoettingen.TFClassFASTA.core.Fasta;
-import BioinformatikGoettingen.TFClassFASTA.db.FastaDAO;
+import de.sybig.TFClassFASTA.core.Fasta;
+import de.sybig.TFClassFASTA.db.FastaDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.jersey.params.LongParam;
 import io.dropwizard.setup.Environment;

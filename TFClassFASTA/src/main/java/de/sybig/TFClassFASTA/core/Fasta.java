@@ -1,4 +1,4 @@
-package BioinformatikGoettingen.TFClassFASTA.core;
+package de.sybig.TFClassFASTA.core;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

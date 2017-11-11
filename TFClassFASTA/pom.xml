@@ -9,7 +9,7 @@
         <maven>3.0.0</maven>
     </prerequisites>
 
-    <groupId>BioinformatikGoettingen</groupId>
+    <groupId>de.sybig</groupId>
     <artifactId>TFClassFASTA</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>

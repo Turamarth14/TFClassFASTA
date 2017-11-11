@@ -1,8 +1,8 @@
-package BioinformatikGoettingen.TFClassFASTA.db;
+package de.sybig.TFClassFASTA.db;
 
 import java.util.List;
 import org.hibernate.SessionFactory;
-import BioinformatikGoettingen.TFClassFASTA.core.Fasta;
+import de.sybig.TFClassFASTA.core.Fasta;
 import io.dropwizard.hibernate.AbstractDAO;
 
 public class FastaDAO extends AbstractDAO<Fasta>{
