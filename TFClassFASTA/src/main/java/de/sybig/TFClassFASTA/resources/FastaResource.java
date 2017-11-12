@@ -1,9 +1,14 @@
 package de.sybig.TFClassFASTA.resources;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,12 +30,28 @@ public class FastaResource {
 		this.environment = environment;
 	}
 	
-	@GET
+	/*@GET
 	@Produces("application/fasta")
 	@Path("/{UID}")
 	@UnitOfWork
 	public Fasta getFasta(@PathParam(value = "UID") LongParam UID) {
-		return fastaDAO.getByUID(UID.get());
+		Fasta fst = fastaDAO.getByUID(UID.get());
+		return fst;
+		//return fastaDAO.getByUID(UID.get());
+	}*/
+
+	@GET
+	@Produces("application/fasta")
+	@Path("/{UID}")
+	@UnitOfWork
+	public Response getFastas(@PathParam(value = "UID") String UIDs) {
+		List<Long> listUID = Arrays.asList(UIDs.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
+		List<Fasta> listFasta = listUID.stream().map(uid -> fastaDAO.getByUID(uid)).collect(Collectors.toList());
+		for(Fasta fst : listFasta) {
+			System.out.println(fst.getHeader());
+		}
+		GenericEntity<List<Fasta>> result = new GenericEntity<List<Fasta>>(listFasta) {};
+		return Response.ok(result).build();
 	}
 	
 	@GET
