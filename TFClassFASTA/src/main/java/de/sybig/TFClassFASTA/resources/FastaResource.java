@@ -26,6 +26,7 @@ public class FastaResource {
 	}
 	
 	@GET
+	@Produces("application/fasta")
 	@Path("/{UID}")
 	@UnitOfWork
 	public Fasta getFasta(@PathParam(value = "UID") LongParam UID) {

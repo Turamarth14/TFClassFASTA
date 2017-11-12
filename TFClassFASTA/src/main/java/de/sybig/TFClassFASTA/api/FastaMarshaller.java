@@ -19,21 +19,24 @@ import de.sybig.TFClassFASTA.core.Fasta;
 public class FastaMarshaller implements MessageBodyWriter<Fasta>{
 
 	@Override
-	public long getSize(Fasta arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4) {
+	public long getSize(Fasta obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
 		return -1;
 	}
 
 	@Override
-	public boolean isWriteable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+		return type == Fasta.class;
 	}
 
 	@Override
-	public void writeTo(Fasta arg0, Class<?> arg1, Type arg2, Annotation[] arg3, MediaType arg4,
-			MultivaluedMap<String, Object> arg5, OutputStream arg6) throws IOException, WebApplicationException {
-		// TODO Auto-generated method stub
-		
+	public void writeTo(Fasta obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+			MultivaluedMap<String, Object> httpHeaders, OutputStream outputStream) throws IOException, WebApplicationException {
+		httpHeaders.add("Content-Type", "text/plain; charset=UTF-8");
+		StringBuffer str = new StringBuffer();
+		str.append(obj.getHeader());
+		str.append("\n");
+		str.append(obj.getSequence());
+		outputStream.write(str.toString().getBytes());	
 	}
 
 }

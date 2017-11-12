@@ -2,6 +2,7 @@ package de.sybig.TFClassFASTA;
 
 import com.google.common.base.Charsets;
 
+import de.sybig.TFClassFASTA.api.FastaMarshaller;
 import de.sybig.TFClassFASTA.core.Fasta;
 import de.sybig.TFClassFASTA.db.FastaDAO;
 import de.sybig.TFClassFASTA.resources.FastaResource;
@@ -48,6 +49,8 @@ public class TFClassFASTAApplication extends Application<TFClassFASTAConfigurati
     public void run(final TFClassFASTAConfiguration configuration,
                     final Environment environment) {
         final FastaDAO fastaDAO = new FastaDAO(hibernate.getSessionFactory());
+        final FastaMarshaller marshaller = new FastaMarshaller();
+        environment.jersey().register(marshaller);
         environment.jersey().register(new FastaResource(fastaDAO,environment));
     }
 

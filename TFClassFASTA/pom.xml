@@ -21,7 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>1.2.0</dropwizard.version>
         <junit.version>4.12</junit.version>
-        <mainClass>BioinformatikGoettingen.TFClassFASTA.TFClassFASTAApplication</mainClass>
+        <mainClass>de.sybig.TFClassFASTA.TFClassFASTAApplication</mainClass>
     </properties>
 	<repositories>
 		<repository>
