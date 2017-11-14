@@ -13,9 +13,14 @@ public class FastaDAO extends AbstractDAO<Fasta>{
 	
 	public Fasta getByUID(Long uid){
 		return get(uid);
-		//return list(namedQuery("Fasta.getByUID").setParameter("UID", uid));
 	}
-	public List<Fasta> getByTaxon(String taxon){
-		return list(namedQuery("Fasta.getByTAXON").setParameter("TAXON", taxon));
+	public List<Fasta> getByTaxon(String taxon, String type, String align){
+		return list(namedQuery("Fasta.getByTAXON").setParameter("TAXON", taxon).setParameter("TYPE", type).setParameter("ALIGN", Fasta.Alignment.getEnum(align)));
 	}	
+	public List<Fasta> getByType(String type, String taxon, String align){
+		return list(namedQuery("Fasta.getByTYPE").setParameter("TYPE", type).setParameter("TAXON", taxon).setParameter("ALIGN", Fasta.Alignment.getEnum(align)));
+	}
+	public List<Fasta> getByAlign(String align, String taxon, String type){
+		return list(namedQuery("Fasta.getByALIGNMENT").setParameter("ALIGN", Fasta.Alignment.getEnum(align)).setParameter("TAXON", taxon).setParameter("TYPE",type));
+	}
 }

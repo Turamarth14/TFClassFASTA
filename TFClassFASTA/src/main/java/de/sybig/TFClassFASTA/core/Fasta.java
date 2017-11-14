@@ -13,7 +13,17 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Fasta.getByUID", query = "SELECT fst FROM "
             + "Fasta fst WHERE fst.UID = :UID"),
     @NamedQuery(name = "Fasta.getByTAXON", query = "SELECT fst FROM "
-            + "Fasta fst WHERE fst.taxon = :TAXON")    
+            + "Fasta fst WHERE fst.taxon = :TAXON "
+    		+ "AND (:TYPE is null OR fst.type = :TYPE) "
+            + "AND (:ALIGN is null OR fst.alignment = :ALIGN) "),
+    @NamedQuery(name = "Fasta.getByTYPE", query = "SELECT fst FROM "
+            + "Fasta fst WHERE fst.type = :TYPE "
+            + "AND (:TAXON is null OR fst.taxon = :TAXON) "
+            + "AND (:ALIGN is null OR fst.alignment = :ALIGN) "),
+    @NamedQuery(name = "Fasta.getByALIGNMENT", query = "SELECT fst FROM "
+            + "Fasta fst WHERE fst.alignment = :ALIGNMENT "
+            + "AND (:TAXON is null OR fst.taxon = :TAXON) "
+            + "AND (:TYPE is null OR fst.type = :TYPE) ")
 })
 public class Fasta {
 	
@@ -99,7 +109,7 @@ public class Fasta {
 	}
 
 	public enum Alignment{
-    	TYP1, TYP2, TYP3;
+    	TYP1, TYP2, TYP3, TYPINVALID;
     	@Override
     	public String toString(){
     	    switch (this) {
@@ -109,8 +119,19 @@ public class Fasta {
     		return "typ2";
     	    case TYP3:
     	    return "typ3";
+    	    case TYPINVALID:
+    	    return "invalid";
     	    }
     	    return "";
+    	}
+    	public static Alignment getEnum(String value) {
+    		if(value == null) {return null;}
+    		try {
+    			return Alignment.valueOf(value);
+    		}
+    		catch(IllegalArgumentException e) {
+    			return TYPINVALID;
+    		}
     	}
     }
 	
