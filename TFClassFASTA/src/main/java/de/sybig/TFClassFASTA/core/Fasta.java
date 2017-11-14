@@ -11,7 +11,9 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Fasta.getByUID", query = "SELECT fst FROM "
-            + "Fasta fst WHERE fst.UID = :UID")
+            + "Fasta fst WHERE fst.UID = :UID"),
+    @NamedQuery(name = "Fasta.getByTAXON", query = "SELECT fst FROM "
+            + "Fasta fst WHERE fst.taxon = :TAXON")    
 })
 public class Fasta {
 	

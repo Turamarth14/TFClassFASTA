@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
@@ -16,7 +17,7 @@ import de.sybig.TFClassFASTA.core.Fasta;
 
 @Provider
 @Consumes("application/fasta")
-public class FastaUnmarshaller implements MessageBodyReader<Fasta>{
+public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 
 	@Override
 	public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
@@ -25,7 +26,7 @@ public class FastaUnmarshaller implements MessageBodyReader<Fasta>{
 	}
 
 	@Override
-	public Fasta readFrom(Class<Fasta> arg0, Type arg1, Annotation[] arg2, MediaType arg3,
+	public List<Fasta> readFrom(Class<List<Fasta>> arg0, Type arg1, Annotation[] arg2, MediaType arg3,
 			MultivaluedMap<String, String> arg4, InputStream arg5) throws IOException, WebApplicationException {
 		// TODO Auto-generated method stub
 		return null;

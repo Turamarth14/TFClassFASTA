@@ -15,4 +15,7 @@ public class FastaDAO extends AbstractDAO<Fasta>{
 		return get(uid);
 		//return list(namedQuery("Fasta.getByUID").setParameter("UID", uid));
 	}
+	public List<Fasta> getByTaxon(String taxon){
+		return list(namedQuery("Fasta.getByTAXON").setParameter("TAXON", taxon));
+	}	
 }

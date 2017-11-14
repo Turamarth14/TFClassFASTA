@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -19,27 +20,40 @@ import de.sybig.TFClassFASTA.core.Fasta;
 
 @Provider
 @Produces("application/fasta")
-public class FastaMarshaller implements MessageBodyWriter<Fasta>{
+public class FastaMarshaller implements MessageBodyWriter<List<Fasta>>{
 
 	@Override
-	public long getSize(Fasta obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
+	public long getSize(List<Fasta> obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
 		return -1;
 	}
-
+	
 	@Override
 	public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-		return type == Fasta.class;
+		if(Collection.class.isAssignableFrom(type)) {
+			ParameterizedType t = (ParameterizedType) genericType;
+			if(t.getActualTypeArguments()[0].equals(Fasta.class)) {
+				return true;
+			}
+		}
+		return false;
 	}
-
+	
 	@Override
-	public void writeTo(Fasta obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+	public void writeTo(List<Fasta> obj, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders, OutputStream outputStream) throws IOException, WebApplicationException {
 		httpHeaders.add("Content-Type", "text/plain; charset=UTF-8");
 		StringBuffer str = new StringBuffer();
-		str.append(obj.getHeader());
-		str.append("\n");
-		str.append(obj.getSequence());
+		for(Fasta fst : obj) {
+			str.append(fst.getHeader());
+			str.append("\n");
+			str.append(fst.getSequence());
+			str.append("\n");
+		}
+		if(str.length() > 0) {
+			str.setLength(str.length()-1);
+		}
 		outputStream.write(str.toString().getBytes());	
+		
 	}
 
 }

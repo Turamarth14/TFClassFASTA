@@ -29,40 +29,23 @@ public class FastaResource {
 		this.fastaDAO = fastaDAO;
 		this.environment = environment;
 	}
-	
-	/*@GET
-	@Produces("application/fasta")
-	@Path("/{UID}")
-	@UnitOfWork
-	public Fasta getFasta(@PathParam(value = "UID") LongParam UID) {
-		Fasta fst = fastaDAO.getByUID(UID.get());
-		return fst;
-		//return fastaDAO.getByUID(UID.get());
-	}*/
 
 	@GET
 	@Produces("application/fasta")
-	@Path("/{UID}")
+	@Path("/taxon/{TAXON}")
 	@UnitOfWork
-	public Response getFastas(@PathParam(value = "UID") String UIDs) {
-		List<Long> listUID = Arrays.asList(UIDs.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
-		List<Fasta> listFasta = listUID.stream().map(uid -> fastaDAO.getByUID(uid)).collect(Collectors.toList());
-		for(Fasta fst : listFasta) {
-			System.out.println(fst.getHeader());
-		}
-		GenericEntity<List<Fasta>> result = new GenericEntity<List<Fasta>>(listFasta) {};
-		return Response.ok(result).build();
+	public List<Fasta> getFasta(@PathParam(value = "TAXON") String Taxons) {
+		List<String> listTaxons = Arrays.asList(Taxons.split(","));
+		return listTaxons.stream().flatMap(tax -> fastaDAO.getByTaxon(tax).stream()).collect(Collectors.toList());
 	}
 	
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("File/{UID}")
+	@Produces("application/fasta")
+	@Path("/UID/{UID}")
 	@UnitOfWork
-	public Response getFile(@PathParam(value = "UID") LongParam UID) {
-		Fasta fasta = fastaDAO.getByUID(UID.get());
-		String data = fasta.toFile();
-		return Response.ok(data, MediaType.TEXT_PLAIN)
-				.header("Content-Disposition", "attachment; filename=\"" + fasta.getUID() + "\"")
-				.build();
+	public List<Fasta> getFastas(@PathParam(value = "UID") String UIDs) {
+		List<Long> listUID = Arrays.asList(UIDs.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
+		List<Fasta> listFasta = listUID.stream().map(uid -> fastaDAO.getByUID(uid)).collect(Collectors.toList());
+		return listFasta;
 	}
 }
