@@ -28,7 +28,7 @@ import javax.persistence.NamedQuery;
 public class Fasta {
 	
     @Id
-    @GeneratedValue	
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)	
 	private Long UID;
     
     private String taxon;
@@ -43,7 +43,15 @@ public class Fasta {
     public Fasta() {
     	
     }
-    
+    public Fasta(String header, String seq) {
+    	this.header = header;
+    	this.sequence = seq;
+    	this.alignment = Alignment.TYP1;
+    	this.taxon = "Default";
+    	this.type = "Default";
+    	this.version = "Default";
+    	this.tfclassID = "Default";
+    }
     public Long getUID() {
 		return UID;
 	}
@@ -135,7 +143,7 @@ public class Fasta {
     	}
     }
 	
-	public String toFile() {
+	public String toString() {
 		return this.header + "\n" + this.sequence;
 	}
 }

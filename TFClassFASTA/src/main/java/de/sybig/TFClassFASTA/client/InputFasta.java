@@ -6,7 +6,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -31,7 +31,13 @@ public class InputFasta {
 			multiPart.field("taxon", "human");
 			multiPart.bodyPart(filePart);
 			System.out.println(multiPart.getMediaType());
-			target.request(MediaType.MULTIPART_FORM_DATA).post(Entity.entity(multiPart, multiPart.getMediaType()));
+			System.out.println(multiPart.getField("taxon").getValue());
+			System.out.println(multiPart.getField("fasta").getEntity());
+			
+			multiPart.getBodyParts().forEach(part -> System.out.println(part.getMediaType() + "\t" + part.getEntity() + "\t" + part.getContentDisposition()));
+			Response response = target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
+			System.out.println(response.getStatus());
+			System.out.println(response.readEntity(String.class));
 			client.close();
 		}
 		catch(Exception e) {
