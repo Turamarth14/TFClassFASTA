@@ -11,6 +11,7 @@ import de.thomaskrille.dropwizard_template_config.TemplateConfigBundle;
 import de.thomaskrille.dropwizard_template_config.TemplateConfigBundleConfiguration;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.migrations.MigrationsBundle;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -43,6 +44,7 @@ public class TFClassFASTAApplication extends Application<TFClassFASTAConfigurati
 			}        	
         });
         bootstrap.addBundle(hibernate);
+        bootstrap.addBundle(new MultiPartBundle());
         bootstrap.addBundle(new TemplateConfigBundle(new TemplateConfigBundleConfiguration().charset(Charsets.US_ASCII)));
     }
 

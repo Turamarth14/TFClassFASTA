@@ -16,12 +16,15 @@ import javax.ws.rs.ext.Provider;
 import de.sybig.TFClassFASTA.core.Fasta;
 
 @Provider
-@Consumes("application/fasta")
+@Consumes(MediaType.MULTIPART_FORM_DATA)
 public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 
 	@Override
-	public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
+	public boolean isReadable(Class<?> arg0, Type genericType, Annotation[] annotations, MediaType mediaType) {
 		// TODO Auto-generated method stub
+		System.out.println("Type " + mediaType.getType());
+		System.out.println("Subtype " + mediaType.getSubtype());
+		mediaType.getParameters().forEach((key,value) -> System.out.println(key + "\t" + value));
 		return true;
 	}
 
