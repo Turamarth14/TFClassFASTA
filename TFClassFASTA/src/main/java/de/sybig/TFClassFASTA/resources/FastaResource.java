@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -74,6 +76,14 @@ public class FastaResource {
 	public List<Fasta> getFastas(@PathParam(value = "UID") String UIDs) {
 		List<Long> listUID = Arrays.asList(UIDs.split(",")).stream().map(Long::parseLong).collect(Collectors.toList());
 		List<Fasta> listFasta = listUID.stream().map(uid -> fastaDAO.getByUID(uid)).collect(Collectors.toList());
+		return listFasta;
+	}
+	
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Path("/upload")
+	public List<Fasta> addFastas(List<Fasta> listFasta) {
+		listFasta.forEach(fst -> fastaDAO.create(fst));
 		return listFasta;
 	}
 }

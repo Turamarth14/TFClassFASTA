@@ -23,4 +23,8 @@ public class FastaDAO extends AbstractDAO<Fasta>{
 	public List<Fasta> getByAlign(String align, String taxon, String type){
 		return list(namedQuery("Fasta.getByALIGNMENT").setParameter("ALIGN", Fasta.Alignment.getEnum(align)).setParameter("TAXON", taxon).setParameter("TYPE",type));
 	}
+	
+	public Fasta create(Fasta fst) {
+		return persist(fst);
+	}
 }

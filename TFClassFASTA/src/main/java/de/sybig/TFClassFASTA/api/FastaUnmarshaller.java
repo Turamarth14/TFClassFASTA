@@ -22,12 +22,12 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 	@Override
 	public boolean isReadable(Class<?> arg0, Type arg1, Annotation[] arg2, MediaType arg3) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public List<Fasta> readFrom(Class<List<Fasta>> arg0, Type arg1, Annotation[] arg2, MediaType arg3,
-			MultivaluedMap<String, String> arg4, InputStream arg5) throws IOException, WebApplicationException {
+	public List<Fasta> readFrom(Class<List<Fasta>> arg0, Type genericType, Annotation[] annotations, MediaType mediaType,
+			MultivaluedMap<String, String> httpHeaders, InputStream inputStream) throws IOException, WebApplicationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
