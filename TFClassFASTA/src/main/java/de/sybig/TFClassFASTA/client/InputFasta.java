@@ -1,7 +1,8 @@
 package de.sybig.TFClassFASTA.client;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -15,6 +16,7 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 public class InputFasta 
 {
+	private static final Pattern pat = Pattern.compile("_|-|\\.[a-zA-Z]");
 	private static File dbdTreeDir;
 	private static File protTreeDir;
     public static void main( String[] args )
@@ -67,6 +69,11 @@ public class InputFasta
 		}*/
     }
     
+    /**
+     * Assuming that only phyml-input, phyml-output and prank-output in DBD matter
+     * Adding whole/modules with special desc value to DB
+     * @param dir
+     */
     private static void searchDBDTree(File dir) {
     	System.out.println("Adding data in " + dir.getName());
     	File[] subDirs = dir.listFiles(File::isDirectory);
@@ -74,38 +81,37 @@ public class InputFasta
     		searchDBDTree(subDir);
     	}
     	File phymlFile, prankFile, logoFile;
-    	File[] fileList = dir.listFiles((file, name) -> name.endsWith("_phyml-input.fasta.txt"));
     	logoFile = findDBDFile(dir, "dbd_phyml-input.fasta.txt");
     	if(logoFile != null)
-    		addFileToDB(logoFile,"DBD");
-    	phymlFile = findDBDFile(dir, "dbd_phyml-output.fasta.txt");
+    		addFileToDB(logoFile,"DBD","Logoplot","normal");
+    	/*phymlFile = findDBDFile(dir, "dbd_phyml-output.fasta.txt");
     	if(phymlFile != null)
-    		addFileToDB(phymlFile,"DBD");    	
+    		addFileToDB(phymlFile,"DBD","Phyml","normal");    	
     	prankFile = findDBDFile(dir, "dbd_prank-output.fasta.txt");
     	if(prankFile != null)
-    		addFileToDB(prankFile,"DBD"); 
+    		addFileToDB(prankFile,"DBD","Prank","normal"); 
     	if(dir.listFiles((file, name) -> name.contains("modules")).length > 0) {
         	logoFile = findDBDFile(dir, "dbd-modules_phyml-input.fasta.txt");
         	if(logoFile != null)
-        		addFileToDB(logoFile,"DBD"); 
+        		addFileToDB(logoFile,"DBD","Logoplot","modules"); 
         	phymlFile = findDBDFile(dir, "dbd-modules_phyml-output.fasta.txt");
         	if(phymlFile != null)
-        		addFileToDB(phymlFile,"DBD"); 
+        		addFileToDB(phymlFile,"DBD","Phyml","modules"); 
         	prankFile = findDBDFile(dir, "dbd-modules_prank-output.fasta.txt");   
         	if(prankFile != null)
-        		addFileToDB(prankFile,"DBD"); 
+        		addFileToDB(prankFile,"DBD","Prank","modules"); 
     	}
     	if(dir.listFiles((file, name) -> name.contains("whole")).length > 0) {
         	logoFile = findDBDFile(dir, "dbd-whole_phyml-input.fasta.txt");
         	if(logoFile != null)
-        		addFileToDB(logoFile,"DBD"); 
+        		addFileToDB(logoFile,"DBD","Logoplot","whole"); 
         	phymlFile = findDBDFile(dir, "dbd-whole_phyml-output.fasta.txt");
         	if(phymlFile != null)
-        		addFileToDB(phymlFile,"DBD"); 
+        		addFileToDB(phymlFile,"DBD","Phyml","whole"); 
         	prankFile = findDBDFile(dir, "dbd-whole_prank-output.fasta.txt");   
         	if(prankFile != null)
-        		addFileToDB(prankFile,"DBD"); 
-    	}    	
+        		addFileToDB(prankFile,"DBD","Prank","whole"); 
+    	}  */  	
     }
     /**
      * Assuming that there are only mammalia and mammalia_slim possible in DBD
@@ -138,9 +144,15 @@ public class InputFasta
     	}
     }
     
-    private static void addFileToDB(File file, String type) {
+    private static void addFileToDB(File file, String type, String align, String desc) {
 		try{
 			System.out.println("Adding file " + file.getName() + " to DB");
+			Matcher matcher = pat.matcher(file.getName());
+			if(!matcher.find()) {
+				System.out.println("Could not identify tfclassId");
+				return;
+			}
+			String tfclassID = file.getName().substring(0, matcher.start());
 			Client client = ClientBuilder.newBuilder()
 					.register(MultiPartFeature.class)
 					.build();
@@ -148,6 +160,9 @@ public class InputFasta
 			FileDataBodyPart filePart = new FileDataBodyPart("fasta", file);
 			FormDataMultiPart multiPart = new FormDataMultiPart();
 			multiPart.field("type", type);
+			multiPart.field("align", align);
+			multiPart.field("desc", desc);
+			multiPart.field("tfclassid", tfclassID);
 			multiPart.bodyPart(filePart);
 			
 			Response response = target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
@@ -157,7 +172,7 @@ public class InputFasta
 		}
 		catch(Exception e) {
 			System.out.println(e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}    	
     }
 }

@@ -36,23 +36,41 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 		List<Fasta> listFasta = new ArrayList<>();
 		List<String> fastaFile = new ArrayList<>();
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-		String line, type, align, source;
+		String line, type, align, desc, tfclassID,source;
+		line = type = align = desc = tfclassID = source = null;
 		while((line = in.readLine()) != null) {
+			System.out.println(line);
 			if(!line.startsWith("Content-Disposition")) {
 				continue;
 			}
 			switch(line.substring(line.lastIndexOf("name=") + 6, line.lastIndexOf('"'))) {
 			case "type":
 				in.readLine();
-				System.out.println("Type = " + in.readLine());
+				type = in.readLine();
 				break;
-			case "taxon":
+			case "align":
 				in.readLine();
-				System.out.println("Taxon = " + in.readLine());
+				align = in.readLine();
 				break;
+			case "desc":
+				in.readLine();
+				desc = in.readLine();
+				break;	
+			case "tfclassid":
+				in.readLine();
+				tfclassID = in.readLine();
+				break;	
 			case "fasta":
+				String temp = line;
+				System.out.println(temp);
+				int firstIndex = line.indexOf('"')+1;
+				System.out.println("First index = " + firstIndex);
+				int secondIndex = line.substring(firstIndex+1).indexOf('"')+1;
+				source = line.substring(firstIndex,firstIndex+secondIndex);
+				System.out.println("Second index = " + secondIndex);
+				System.out.println("Substring = " + temp.substring(firstIndex, firstIndex+secondIndex));
 				in.readLine();
-				line = in.readLine();
+				line = in.readLine();				
 				while(!line.startsWith("--Boundary") && !line.isEmpty()) {
 					fastaFile.add(line);
 					fastaFile.add(in.readLine());
@@ -63,9 +81,17 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 			}
 		}
 		in.close();
+		System.out.println("Type = " + type);
+		System.out.println("Align = " + align);
+		System.out.println("Desc = " + desc);
+		System.out.println("TFClassID = " + tfclassID);
+		System.out.println("Source = " + source);
 		for(int i = 0; i < fastaFile.size(); i += 2) {
 			String header = fastaFile.get(i);
 			String seq = fastaFile.get(i+1);
+			System.out.println(i);
+			System.out.println(header);
+			System.out.println(seq);
 			listFasta.add(new Fasta(header,seq));			
 		}
 		return listFasta;
