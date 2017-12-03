@@ -1,7 +1,7 @@
 # Database settings.
 database:
     # the name of the JDBC driver, mysql in our case
-    driverClass: org.sqlite.jdbc
+    driverClass: org.sqlite.JDBC
     # the username
     user: tfadmin
     # the password
