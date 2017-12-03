@@ -36,7 +36,7 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 		List<Fasta> listFasta = new ArrayList<>();
 		List<String> fastaFile = new ArrayList<>();
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-		String line;
+		String line, type, align, source;
 		while((line = in.readLine()) != null) {
 			if(!line.startsWith("Content-Disposition")) {
 				continue;

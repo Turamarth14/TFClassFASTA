@@ -27,7 +27,8 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Fasta.getByTFCLASS", query = "Select fst FROM "
     		+ "Fasta fst where fst.alignment = :ALIGNMENT "
     		+ "And fst.tfclassID = :TFCLASSID "
-    		+ "AND (:TYPE is null OR fst.type = :TYPE) ")
+    		+ "AND (:TYPE is null OR fst.type = :TYPE) "
+    		+ "AND (:DESC is null OR fst.desc = :DESC) ")
 })
 public class Fasta {
 	
@@ -43,6 +44,8 @@ public class Fasta {
     private String version;
     private String header;
     private String tfclassID;
+    private String source;
+    private String desc;
     
     public Fasta() {
     	
@@ -55,6 +58,7 @@ public class Fasta {
     	this.type = "Default";
     	this.version = "Default";
     	this.tfclassID = "Default";
+    	this.source = "Default";
     }
     public Long getUID() {
 		return UID;
@@ -120,6 +124,22 @@ public class Fasta {
 		this.tfclassID = tfclassID;
 	}
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+	
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	
 	public enum Alignment{
     	Logoplot, Phyml, Prank, TYPINVALID;
     	@Override

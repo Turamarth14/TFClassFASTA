@@ -80,24 +80,30 @@ public class FastaResource {
 	@Produces("application/fasta")
 	@Path("/Logoplot/{TFCLASSID}")
 	@UnitOfWork
-	public List<Fasta> getFastaLogo(@PathParam(value = "TFCLASS") String TFClass){
-		return fastaDAO.getAlignedByTFClass(TFClass, "Logoplot", "DBD");
+	public List<Fasta> getFastaLogo(
+			@PathParam(value = "TFCLASS") String TFClass,
+			@QueryParam(value = "DESC") String Desc){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Logoplot", "DBD", Desc);
 	}
 
 	@GET
 	@Produces("application/fasta")
 	@Path("/Phyml/{TFCLASSID}")
 	@UnitOfWork
-	public List<Fasta> getFastaPhyml(@PathParam(value = "TFCLASS") String TFClass){
-		return fastaDAO.getAlignedByTFClass(TFClass, "Phyml", "DBD");
+	public List<Fasta> getFastaPhyml(
+			@PathParam(value = "TFCLASS") String TFClass,
+			@QueryParam(value = "DESC") String Desc){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Phyml", "DBD", Desc);
 	}
 	
 	@GET
 	@Produces("application/fasta")
 	@Path("/Prank/{TFCLASSID}")
 	@UnitOfWork
-	public List<Fasta> getFastaPrank(@PathParam(value = "TFCLASS") String TFClass){
-		return fastaDAO.getAlignedByTFClass(TFClass, "Prank", "DBD");
+	public List<Fasta> getFastaPrank(
+			@PathParam(value = "TFCLASS") String TFClass,
+			@QueryParam(value = "DESC") String Desc){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Prank", "DBD", Desc);
 	}	
 	
 	@POST
