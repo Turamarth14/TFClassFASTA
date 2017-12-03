@@ -76,6 +76,30 @@ public class FastaResource {
 		return listFasta;
 	}
 	
+	@GET
+	@Produces("application/fasta")
+	@Path("/Logoplot/{TFCLASSID}")
+	@UnitOfWork
+	public List<Fasta> getFastaLogo(@PathParam(value = "TFCLASS") String TFClass){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Logoplot", "DBD");
+	}
+
+	@GET
+	@Produces("application/fasta")
+	@Path("/Phyml/{TFCLASSID}")
+	@UnitOfWork
+	public List<Fasta> getFastaPhyml(@PathParam(value = "TFCLASS") String TFClass){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Phyml", "DBD");
+	}
+	
+	@GET
+	@Produces("application/fasta")
+	@Path("/Prank/{TFCLASSID}")
+	@UnitOfWork
+	public List<Fasta> getFastaPrank(@PathParam(value = "TFCLASS") String TFClass){
+		return fastaDAO.getAlignedByTFClass(TFClass, "Prank", "DBD");
+	}	
+	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/upload")

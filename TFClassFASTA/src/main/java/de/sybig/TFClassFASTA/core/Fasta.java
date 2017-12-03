@@ -23,7 +23,11 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "Fasta.getByALIGNMENT", query = "SELECT fst FROM "
             + "Fasta fst WHERE fst.alignment = :ALIGNMENT "
             + "AND (:TAXON is null OR fst.taxon = :TAXON) "
-            + "AND (:TYPE is null OR fst.type = :TYPE) ")
+            + "AND (:TYPE is null OR fst.type = :TYPE) "),
+    @NamedQuery(name = "Fasta.getByTFCLASS", query = "Select fst FROM "
+    		+ "Fasta fst where fst.alignment = :ALIGNMENT "
+    		+ "And fst.tfclassID = :TFCLASSID "
+    		+ "AND (:TYPE is null OR fst.type = :TYPE) ")
 })
 public class Fasta {
 	
@@ -46,7 +50,7 @@ public class Fasta {
     public Fasta(String header, String seq) {
     	this.header = header;
     	this.sequence = seq;
-    	this.alignment = Alignment.TYP1;
+    	this.alignment = Alignment.TYPINVALID;
     	this.taxon = "Default";
     	this.type = "Default";
     	this.version = "Default";
@@ -117,16 +121,16 @@ public class Fasta {
 	}
 
 	public enum Alignment{
-    	TYP1, TYP2, TYP3, TYPINVALID;
+    	Logoplot, Phyml, Prank, TYPINVALID;
     	@Override
     	public String toString(){
     	    switch (this) {
-    	    case TYP1:
-    		return "typ1";
-    	    case TYP2:
-    		return "typ2";
-    	    case TYP3:
-    	    return "typ3";
+    	    case Logoplot:
+    		return "Logoplot";
+    	    case Phyml:
+    		return "Phyml";
+    	    case Prank:
+    	    return "Prank";
     	    case TYPINVALID:
     	    return "invalid";
     	    }
