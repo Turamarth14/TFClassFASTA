@@ -24,6 +24,12 @@ public class FastaDAO extends AbstractDAO<Fasta>{
 		return list(namedQuery("Fasta.getByALIGNMENT").setParameter("ALIGN", Fasta.Alignment.getEnum(align)).setParameter("TAXON", taxon).setParameter("TYPE",type));
 	}
 	public List<Fasta> getAlignedByTFClass(String tfclass, String align, String type, String desc){
+		System.out.println("TFClass " + tfclass);
+		System.out.println("Align " + align);
+		System.out.println("Type " + type);
+		System.out.println("Desc " + desc);
+		List<Fasta> result = list(namedQuery("Fasta.getByTFCLASS").setParameter("ALIGNMENT", Fasta.Alignment.getEnum(align)).setParameter("TFCLASSID", tfclass).setParameter("TYPE",type).setParameter("DESC", desc));
+		System.out.println("Anzahl " + result.size());
 		return list(namedQuery("Fasta.getByTFCLASS").setParameter("ALIGNMENT", Fasta.Alignment.getEnum(align)).setParameter("TFCLASSID", tfclass).setParameter("TYPE",type).setParameter("DESC", desc));
 	}
 	

@@ -71,6 +71,9 @@ public class InputFasta
     
     /**
      * Assuming that only phyml-input, phyml-output and prank-output in DBD matter
+     * phyml-input -> normal fasta
+     * phyml-output -> logoplot-fasta, input for Phylogeny.fr tree
+     * prank-output -> input for webPRANK tree 
      * Adding whole/modules with special desc value to DB
      * @param dir
      */
@@ -80,20 +83,20 @@ public class InputFasta
     	for(File subDir : subDirs) {
     		searchDBDTree(subDir);
     	}
-    	File phymlFile, prankFile, logoFile;
-    	logoFile = findDBDFile(dir, "dbd_phyml-input.fasta.txt");
-    	if(logoFile != null)
-    		addFileToDB(logoFile,"DBD","Logoplot","normal");
-    	/*phymlFile = findDBDFile(dir, "dbd_phyml-output.fasta.txt");
+    	File phymlFile, prankFile, fastaFile;
+    	fastaFile = findDBDFile(dir, "dbd_phyml-input.fasta.txt");
+    	if(fastaFile != null)
+    		addFileToDB(fastaFile,"DBD","Not_Aligned","normal");
+    	phymlFile = findDBDFile(dir, "dbd_phyml-output.fasta.txt");
     	if(phymlFile != null)
     		addFileToDB(phymlFile,"DBD","Phyml","normal");    	
     	prankFile = findDBDFile(dir, "dbd_prank-output.fasta.txt");
     	if(prankFile != null)
     		addFileToDB(prankFile,"DBD","Prank","normal"); 
     	if(dir.listFiles((file, name) -> name.contains("modules")).length > 0) {
-        	logoFile = findDBDFile(dir, "dbd-modules_phyml-input.fasta.txt");
-        	if(logoFile != null)
-        		addFileToDB(logoFile,"DBD","Logoplot","modules"); 
+        	fastaFile = findDBDFile(dir, "dbd-modules_phyml-input.fasta.txt");
+        	if(fastaFile != null)
+        		addFileToDB(fastaFile,"DBD","Not_Aligned","modules"); 
         	phymlFile = findDBDFile(dir, "dbd-modules_phyml-output.fasta.txt");
         	if(phymlFile != null)
         		addFileToDB(phymlFile,"DBD","Phyml","modules"); 
@@ -102,16 +105,16 @@ public class InputFasta
         		addFileToDB(prankFile,"DBD","Prank","modules"); 
     	}
     	if(dir.listFiles((file, name) -> name.contains("whole")).length > 0) {
-        	logoFile = findDBDFile(dir, "dbd-whole_phyml-input.fasta.txt");
-        	if(logoFile != null)
-        		addFileToDB(logoFile,"DBD","Logoplot","whole"); 
+        	fastaFile = findDBDFile(dir, "dbd-whole_phyml-input.fasta.txt");
+        	if(fastaFile != null)
+        		addFileToDB(fastaFile,"DBD","Not_Aligned","whole"); 
         	phymlFile = findDBDFile(dir, "dbd-whole_phyml-output.fasta.txt");
         	if(phymlFile != null)
         		addFileToDB(phymlFile,"DBD","Phyml","whole"); 
         	prankFile = findDBDFile(dir, "dbd-whole_prank-output.fasta.txt");   
         	if(prankFile != null)
         		addFileToDB(prankFile,"DBD","Prank","whole"); 
-    	}  */  	
+    	}  	
     }
     /**
      * Assuming that there are only mammalia and mammalia_slim possible in DBD

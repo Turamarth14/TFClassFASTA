@@ -17,6 +17,8 @@
             <column name="version" type="TEXT"/>
             <column name="header" type="TEXT"/>
             <column name="tfclassID" type="TEXT"/>
+            <column name="source" type="TEXT"/>
+            <column name="desc" type="TEXT"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -53,12 +53,23 @@ public class Fasta {
     public Fasta(String header, String seq) {
     	this.header = header;
     	this.sequence = seq;
-    	this.alignment = Alignment.TYPINVALID;
+    	this.alignment = Alignment.Not_Aligned;
     	this.taxon = "Default";
     	this.type = "Default";
     	this.version = "Default";
     	this.tfclassID = "Default";
     	this.source = "Default";
+    }
+    public Fasta(String header, String seq, String align, String taxon, String type, String tfclassID, String desc, String source) {
+    	this.header = header;
+    	this.sequence = seq;
+    	this.alignment = Alignment.getEnum(align);
+    	this.taxon = taxon;
+    	this.type = type;
+    	this.version = "Default";
+    	this.tfclassID = tfclassID;
+    	this.desc = desc;
+    	this.source = source;  	
     }
     public Long getUID() {
 		return UID;
@@ -141,18 +152,16 @@ public class Fasta {
 	}
 	
 	public enum Alignment{
-    	Logoplot, Phyml, Prank, TYPINVALID;
+    	Phyml, Prank, Not_Aligned;
     	@Override
     	public String toString(){
     	    switch (this) {
-    	    case Logoplot:
-    		return "Logoplot";
     	    case Phyml:
     		return "Phyml";
     	    case Prank:
     	    return "Prank";
-    	    case TYPINVALID:
-    	    return "invalid";
+    	    case Not_Aligned:
+    	    return "not aligned";
     	    }
     	    return "";
     	}
@@ -162,7 +171,7 @@ public class Fasta {
     			return Alignment.valueOf(value);
     		}
     		catch(IllegalArgumentException e) {
-    			return TYPINVALID;
+    			return Not_Aligned;
     		}
     	}
     }
