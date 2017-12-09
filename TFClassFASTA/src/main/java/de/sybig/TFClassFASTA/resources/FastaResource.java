@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import de.sybig.TFClassFASTA.core.Fasta;
 import de.sybig.TFClassFASTA.db.FastaDAO;
+import de.sybig.TFClassFASTA.db.MetaFileDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.setup.Environment;
 
@@ -23,10 +24,12 @@ import io.dropwizard.setup.Environment;
 public class FastaResource {
 
 	private final FastaDAO fastaDAO;
+	private final MetaFileDAO metafileDAO;
 	private final Environment environment;
 	
-	public FastaResource(FastaDAO fastaDAO, Environment environment) {
+	public FastaResource(FastaDAO fastaDAO, MetaFileDAO metafileDAO, Environment environment) {
 		this.fastaDAO = fastaDAO;
+		this.metafileDAO = metafileDAO;
 		this.environment = environment;
 	}
 

@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-
-
 @Entity
 @NamedQueries({
     @NamedQuery(name = "MetaFile.getByTFCLASS", query = "Select file FROM "
