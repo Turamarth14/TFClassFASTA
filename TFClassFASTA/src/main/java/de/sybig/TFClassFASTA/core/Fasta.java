@@ -1,8 +1,10 @@
 package de.sybig.TFClassFASTA.core;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -18,6 +20,7 @@ public class Fasta {
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)	
 	private Long UID;
     
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private MetaFile file;
     private String taxon;
     private String sequence;

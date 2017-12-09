@@ -11,14 +11,19 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="taxon" type="TEXT"/>
+            <column name="sequence" type="TEXT"/>
+            <column name="header" type="TEXT"/>
+            <column name="file" type="TEXT"/>
+        </createTable>
+        <createTable tableName="metafile">
+            <column name="UID" type="INTEGER">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="type" type="TEXT"/>
             <column name="alignment" type="TEXT"/>
-            <column name="sequence" type="TEXT"/>
             <column name="version" type="TEXT"/>
-            <column name="header" type="TEXT"/>
             <column name="tfclassID" type="TEXT"/>
             <column name="source" type="TEXT"/>
-            <column name="desc" type="TEXT"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
