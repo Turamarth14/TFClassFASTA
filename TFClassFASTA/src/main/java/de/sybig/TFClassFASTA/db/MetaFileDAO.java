@@ -18,7 +18,7 @@ public class MetaFileDAO extends AbstractDAO<MetaFile>{
 		return get(uid);
 	}
 
-	public List<MetaFile> getByTFClassID(String tfclassID, String align, String type, String version){
+	public List<MetaFile> getByTFClassID(String tfclassID, String align, String type, Long version){
 		return list(namedQuery("MetaFile.getByTFCLASS").setParameter("TFCLASSID", tfclassID).setParameter("ALIGNMENT", MetaFile.Alignment.getEnum(align)).setParameter("TYPE",MetaFile.Type.getEnum(type)).setParameter("VERSION", version));
 	}
 	
