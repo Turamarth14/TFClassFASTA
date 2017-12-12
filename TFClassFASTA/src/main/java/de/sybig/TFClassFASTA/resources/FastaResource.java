@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import de.sybig.TFClassFASTA.core.Fasta;
+import de.sybig.TFClassFASTA.core.MetaFile;
 import de.sybig.TFClassFASTA.db.FastaDAO;
 import de.sybig.TFClassFASTA.db.MetaFileDAO;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -32,7 +33,19 @@ public class FastaResource {
 		this.metafileDAO = metafileDAO;
 		this.environment = environment;
 	}
-
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/version/{TFCLASSID}/{TYPE}/{ALIGNMENT}")
+	@UnitOfWork
+	public String getNewestVersion(
+			@PathParam(value = "TFCLASSID") String TFClassID,
+			@PathParam(value = "TYPE") String Type,
+			@PathParam(value = "ALIGNMENT") String Alignment){
+		List<MetaFile> result = metafileDAO.getNewestByTFClassID(TFClassID, Alignment, Type);
+		return result.get(0).getVersion();
+	}
+	
 	@GET
 	@Produces("application/fasta")
 	@Path("/taxon/{TAXON}")

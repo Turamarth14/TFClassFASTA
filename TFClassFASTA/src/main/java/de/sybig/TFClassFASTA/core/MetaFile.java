@@ -13,7 +13,14 @@ import javax.persistence.NamedQuery;
     @NamedQuery(name = "MetaFile.getByTFCLASS", query = "Select file FROM "
     		+ "MetaFile file where file.alignment = :ALIGNMENT "
     		+ "And file.tfclassID = :TFCLASSID "
-    		+ "AND file.type = :TYPE")
+    		+ "AND file.type = :TYPE "
+    		+ "AND file.version = :VERSION"),
+    @NamedQuery(name = "MetaFile.getNewestByTFCLASS", query = "Select * FROM "
+    		+ "MetaFile file where file.alignment = :ALIGNMENT "
+    		+ "AND file.tfclassID = :TFCLASSID "
+    		+ "AND file.type = :TYPE "
+    		+ "ORDER BY file.version DESC "
+    		+ "LIMIT 1")
 })
 public class MetaFile {
 
@@ -25,6 +32,7 @@ public class MetaFile {
     private Type type;
     @Enumerated(EnumType.STRING)
     private Alignment alignment;
+    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String version;
     private String tfclassID;
     private String source;
@@ -36,7 +44,7 @@ public class MetaFile {
     	this.tfclassID = "Default";
     	this.source = "Default";
     }
-    public MetaFile(String align, String taxon, String type, String tfclassID,  String source) {
+    public MetaFile(String align, String type, String tfclassID,  String source) {
     	this.alignment = Alignment.getEnum(align);
     	this.type = Type.getEnum(type);
     	this.version = "Default";

@@ -17,6 +17,7 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.Provider;
 
 import de.sybig.TFClassFASTA.core.Fasta;
+import de.sybig.TFClassFASTA.core.MetaFile;
 
 @Provider
 @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -86,6 +87,7 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 		System.out.println("Desc = " + desc);
 		System.out.println("TFClassID = " + tfclassID);
 		System.out.println("Source = " + source);
+		MetaFile sourcefile = new MetaFile(align, type, tfclassID, source);
 		for(int i = 0; i < fastaFile.size();) {
 			String header = fastaFile.get(i);
 			String seq = fastaFile.get(i+1);
@@ -105,7 +107,7 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 			System.out.println(i);
 			System.out.println(header);
 			System.out.println(seq);
-			listFasta.add(new Fasta(header, seq, align, taxon, type, tfclassID, desc, source));			
+			listFasta.add(new Fasta(header, seq, sourcefile, taxon));			
 		}
 		return listFasta;
 	}
