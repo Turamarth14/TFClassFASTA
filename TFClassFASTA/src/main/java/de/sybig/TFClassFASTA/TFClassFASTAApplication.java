@@ -5,6 +5,7 @@ import com.google.common.base.Charsets;
 import de.sybig.TFClassFASTA.api.FastaMarshaller;
 import de.sybig.TFClassFASTA.api.FastaUnmarshaller;
 import de.sybig.TFClassFASTA.core.Fasta;
+import de.sybig.TFClassFASTA.core.MetaFile;
 import de.sybig.TFClassFASTA.db.FastaDAO;
 import de.sybig.TFClassFASTA.db.MetaFileDAO;
 import de.sybig.TFClassFASTA.resources.FastaResource;
@@ -20,7 +21,7 @@ import io.dropwizard.setup.Environment;
 
 public class TFClassFASTAApplication extends Application<TFClassFASTAConfiguration> {
 	
-	private final HibernateBundle<TFClassFASTAConfiguration> hibernate = new HibernateBundle<TFClassFASTAConfiguration>(Fasta.class) {
+	private final HibernateBundle<TFClassFASTAConfiguration> hibernate = new HibernateBundle<TFClassFASTAConfiguration>(Fasta.class, MetaFile.class) {
 		@Override
 		public DataSourceFactory getDataSourceFactory(TFClassFASTAConfiguration configuration) {
 			return configuration.getDataSourceFactory();
@@ -55,7 +56,7 @@ public class TFClassFASTAApplication extends Application<TFClassFASTAConfigurati
         final FastaDAO fastaDAO = new FastaDAO(hibernate.getSessionFactory());
         final MetaFileDAO metafileDAO = new MetaFileDAO(hibernate.getSessionFactory());
         final FastaMarshaller marshaller = new FastaMarshaller();
-        final FastaUnmarshaller unmarshaller = new FastaUnmarshaller();
+        final FastaUnmarshaller unmarshaller = new FastaUnmarshaller(metafileDAO);
         environment.jersey().register(marshaller);
         environment.jersey().register(unmarshaller);
         environment.jersey().register(new FastaResource(fastaDAO,metafileDAO,environment));

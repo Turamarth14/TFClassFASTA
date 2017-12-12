@@ -15,12 +15,11 @@ import javax.persistence.NamedQuery;
     		+ "And file.tfclassID = :TFCLASSID "
     		+ "AND file.type = :TYPE "
     		+ "AND file.version = :VERSION"),
-    @NamedQuery(name = "MetaFile.getNewestByTFCLASS", query = "Select * FROM "
+    @NamedQuery(name = "MetaFile.getNewestByTFCLASS", query = "Select file FROM "
     		+ "MetaFile file where file.alignment = :ALIGNMENT "
     		+ "AND file.tfclassID = :TFCLASSID "
     		+ "AND file.type = :TYPE "
-    		+ "ORDER BY file.version DESC "
-    		+ "LIMIT 1")
+    		+ "ORDER BY file.version DESC")
 })
 public class MetaFile {
 
@@ -32,22 +31,21 @@ public class MetaFile {
     private Type type;
     @Enumerated(EnumType.STRING)
     private Alignment alignment;
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
-    private String version;
+    private Long version;
     private String tfclassID;
     private String source;
     
     public MetaFile() {
     	this.alignment = Alignment.Not_Aligned;
     	this.type = Type.Protein;
-    	this.version = "Default";
+    	this.version = -1l;
     	this.tfclassID = "Default";
     	this.source = "Default";
     }
-    public MetaFile(String align, String type, String tfclassID,  String source) {
+    public MetaFile(String align, String type, String tfclassID, String source, Long version) {
     	this.alignment = Alignment.getEnum(align);
     	this.type = Type.getEnum(type);
-    	this.version = "Default";
+    	this.version = version;
     	this.tfclassID = tfclassID;
     	this.source = source;  	
     }
@@ -75,11 +73,11 @@ public class MetaFile {
 		this.alignment = alignment;
 	}
 
-	public String getVersion() {
+	public Long getVersion() {
 		return version;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(Long version) {
 		this.version = version;
 	}
 

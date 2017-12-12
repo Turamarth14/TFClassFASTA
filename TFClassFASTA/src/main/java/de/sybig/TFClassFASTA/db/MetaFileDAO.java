@@ -19,11 +19,11 @@ public class MetaFileDAO extends AbstractDAO<MetaFile>{
 	}
 
 	public List<MetaFile> getByTFClassID(String tfclassID, String align, String type, String version){
-		return list(namedQuery("MetaFile.getByTFCLASS").setParameter("TFCLASSID", tfclassID).setParameter("ALIGNMENT", align).setParameter("TYPE",type).setParameter("VERSION", version));
+		return list(namedQuery("MetaFile.getByTFCLASS").setParameter("TFCLASSID", tfclassID).setParameter("ALIGNMENT", MetaFile.Alignment.getEnum(align)).setParameter("TYPE",MetaFile.Type.getEnum(type)).setParameter("VERSION", version));
 	}
 	
 	public List<MetaFile> getNewestByTFClassID(String tfclassID, String align, String type) {
-		return list(namedQuery("MetaFile.getNewestByTFCLASS").setParameter("TFCLASSID", tfclassID).setParameter("ALIGNMENT", align).setParameter("TYPE", type));
+		return list(namedQuery("MetaFile.getNewestByTFCLASS").setParameter("TFCLASSID", tfclassID).setParameter("ALIGNMENT", MetaFile.Alignment.getEnum(align)).setParameter("TYPE", MetaFile.Type.getEnum(type)).setMaxResults(1));
 	}
 	
 	public MetaFile create(MetaFile file) {

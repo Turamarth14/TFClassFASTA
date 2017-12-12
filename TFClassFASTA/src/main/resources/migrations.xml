@@ -13,7 +13,7 @@
             <column name="taxon" type="TEXT"/>
             <column name="sequence" type="TEXT"/>
             <column name="header" type="TEXT"/>
-            <column name="file" type="TEXT"/>
+            <column name="fileID" type="INTEGER"/>
         </createTable>
         <createTable tableName="metafile">
             <column name="UID" type="INTEGER">

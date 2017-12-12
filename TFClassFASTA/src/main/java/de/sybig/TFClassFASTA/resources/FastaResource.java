@@ -43,10 +43,10 @@ public class FastaResource {
 			@PathParam(value = "TYPE") String Type,
 			@PathParam(value = "ALIGNMENT") String Alignment){
 		List<MetaFile> result = metafileDAO.getNewestByTFClassID(TFClassID, Alignment, Type);
-		return result.get(0).getVersion();
+		return result.get(0).getVersion().toString();
 	}
 	
-	@GET
+	/*@GET
 	@Produces("application/fasta")
 	@Path("/taxon/{TAXON}")
 	@UnitOfWork
@@ -120,9 +120,9 @@ public class FastaResource {
 			@PathParam(value = "TFCLASS") String TFClass,
 			@QueryParam(value = "DESC") String Desc){
 		return fastaDAO.getAlignedByTFClass(TFClass, "Phyml", "DBD", Desc);
-	}
+	}*/
 	
-	@GET
+	/*@GET
 	@Produces("application/fasta")
 	@Path("/DBD/Prank/{TFCLASS}")
 	@UnitOfWork
@@ -130,7 +130,7 @@ public class FastaResource {
 			@PathParam(value = "TFCLASS") String TFClass,
 			@QueryParam(value = "DESC") String Desc){
 		return fastaDAO.getAlignedByTFClass(TFClass, "Prank", "DBD", Desc);
-	}	
+	}*/	
 	
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -138,6 +138,7 @@ public class FastaResource {
 	@UnitOfWork
 	public List<Fasta> addFastas(List<Fasta> listFasta) {
 		System.out.println("Adding " + listFasta.size() + " entries");
+		metafileDAO.create(listFasta.get(0).getFile());
 		listFasta.forEach(fst -> fastaDAO.create(fst));
 		return listFasta;
 	}
