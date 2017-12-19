@@ -106,7 +106,7 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 				seq += fastaFile.get(i);
 				i++;
 			}
-			String taxon;
+			String taxon, tfactor; 
 			if(header.startsWith(">Gorilla")) {
 				taxon = "Gorilla_gorilla_gorilla";
 			}
@@ -114,10 +114,14 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 				String[] strarray = header.split("_");
 				taxon = strarray[0].substring(1) + "_" + strarray[1];
 			}
+			tfactor = header.substring(taxon.length()+2, header.length()-3);//Starting after Taxon and removing _ma from end
+			if(tfactor.endsWith("-DBD")) {//Removing -DBD
+				tfactor = tfactor.substring(0,tfactor.length() - 4);
+			}
 			System.out.println(i);
 			System.out.println(header);
 			System.out.println(seq);
-			listFasta.add(new Fasta(header, seq, sourcefile, taxon));			
+			listFasta.add(new Fasta(header, seq, sourcefile, taxon, tfactor));			
 		}
 		return listFasta;
 	}

@@ -25,6 +25,7 @@ public class Fasta {
     @JoinColumn(name = "fileID")
     private MetaFile file;
     private String taxon;
+    private String tfactor;
     private String sequence;
     private String header;
     
@@ -36,12 +37,14 @@ public class Fasta {
     	this.sequence = seq;
     	this.file = file;
     	this.taxon = "Default";
+    	this.tfactor = "Default";
     }
-    public Fasta(String header, String seq, MetaFile file, String taxon) {
+    public Fasta(String header, String seq, MetaFile file, String taxon, String tfactor) {
     	this.header = header;
     	this.sequence = seq;
     	this.file = file;
     	this.taxon = taxon; 	
+    	this.tfactor = tfactor;
     }
     public Long getUID() {
 		return UID;
@@ -59,6 +62,14 @@ public class Fasta {
 		this.taxon = taxon;
 	}
 
+	public String getTFactor() {
+		return tfactor;
+	}
+
+	public void setTFactor(String tfactor) {
+		this.tfactor = tfactor;
+	}
+	
 	public String getSequence() {
 		return sequence;
 	}
