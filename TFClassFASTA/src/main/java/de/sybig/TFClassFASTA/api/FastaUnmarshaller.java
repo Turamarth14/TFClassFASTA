@@ -85,16 +85,12 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 			case "tfclassid":
 				in.readLine();
 				tfclassID = in.readLine();
-				break;	
+				break;
+			case "source":
+				in.readLine();
+				source = in.readLine();
+				break;
 			case "fasta":
-				String temp = line;
-				System.out.println(temp);
-				int firstIndex = line.indexOf('"')+1;
-				System.out.println("First index = " + firstIndex);
-				int secondIndex = line.substring(firstIndex+1).indexOf('"')+1;
-				source = line.substring(firstIndex,firstIndex+secondIndex);
-				System.out.println("Second index = " + secondIndex);
-				System.out.println("Substring = " + temp.substring(firstIndex, firstIndex+secondIndex));
 				in.readLine();
 				line = in.readLine();				
 				while(!line.startsWith("--Boundary") && !line.isEmpty()) {
@@ -119,50 +115,111 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 			version = metafiles.get(0).getVersion()+1;
 		}
 		MetaFile sourcefile = new MetaFile(align, type, tfclassID, source, version);
-		for(int i = 0; i < fastaFile.size();) {
-			String header = fastaFile.get(i);
-			String seq = fastaFile.get(i+1);
-			i += 2;
-			System.out.println(i);
-			System.out.println(header);
-			//System.out.println(seq);
-			while(i < fastaFile.size() && !fastaFile.get(i).startsWith(">")) {
-				seq += fastaFile.get(i);
-				i++;
-			}
-			String taxon, tfactor; 
-			if(header.startsWith(">Gorilla_gorilla_gorilla")) {
-				taxon = "Gorilla_gorilla_gorilla";
-			}
-			else if(header.startsWith(">Gorilla gorilla ")) {
-				taxon = "Gorilla_gorilla";
-			}
-			else {
-				String[] strarray = header.split("_");
-				taxon = strarray[0].substring(1) + "_" + strarray[1];
-			}
-			tfactor = header.substring(taxon.length()+2, header.length()-3);//Starting after Taxon and removing _ma from end	
-			if(tfactor.endsWith("-DBD")) {//Removing -DBD
-				tfactor = tfactor.substring(0,tfactor.length() - 4);
-			}
-			if(tfactor.contains("-annot")) {
-				tfactor = tfactor.replace("-annot","");
-			}
-			if(TFactortoID.containsKey(tfactor)) { //Mapping tfactor to id
-				tfactor = TFactortoID.get(tfactor);
-			}
-			else { //Removing last .X until it matches an entry in the map. Otherwise use original tfactor
-				String temp = tfactor;
-				while(temp.lastIndexOf(".") != -1) {
-					temp = temp.substring(0, temp.lastIndexOf("."));
-					System.out.println(temp);
-					if(TFactortoID.containsKey(temp)) {
-						tfactor = TFactortoID.get(temp);
-						break;
+		if(fastaFile.get(0).startsWith(">")) { //Normal fasta format
+			for(int i = 0; i < fastaFile.size();) {
+				String header = fastaFile.get(i);
+				String seq = fastaFile.get(i+1);
+				i += 2;
+				System.out.println(i);
+				System.out.println(header);
+				//System.out.println(seq);
+				while(i < fastaFile.size() && !fastaFile.get(i).startsWith(">")) {
+					seq += fastaFile.get(i);
+					i++;
+				}
+				String taxon, tfactor; 
+				if(header.startsWith(">Gorilla_gorilla_gorilla")) {
+					taxon = "Gorilla_gorilla_gorilla";
+				}
+				else if(header.startsWith(">Gorilla_gorilla")) {
+					taxon = "Gorilla_gorilla";
+				}
+				else if(header.startsWith(">Canis_lupus_familiaris")) {
+					taxon = "Canis_lupus_familiaris";
+				}
+				else if(header.startsWith(">Mustela_putorius_furo")) {
+					taxon = "Mustela_putorius_furo";
+				}
+				else {
+					String[] strarray = header.split("_");
+					taxon = strarray[0].substring(1) + "_" + strarray[1];
+				}
+				tfactor = header.substring(taxon.length()+2, header.length()-3);//Starting after Taxon and removing _ma from end	
+				if(tfactor.endsWith("-DBD")) {//Removing -DBD
+					tfactor = tfactor.substring(0,tfactor.length() - 4);
+				}
+				if(tfactor.contains("-annot")) {
+					tfactor = tfactor.replace("-annot","");
+				}
+				if(TFactortoID.containsKey(tfactor)) { //Mapping tfactor to id
+					tfactor = TFactortoID.get(tfactor);
+				}
+				else { //Removing last .X until it matches an entry in the map. Otherwise use original tfactor
+					String temp = tfactor;
+					while(temp.lastIndexOf(".") != -1) {
+						temp = temp.substring(0, temp.lastIndexOf("."));
+						System.out.println(temp);
+						if(TFactortoID.containsKey(temp)) {
+							tfactor = TFactortoID.get(temp);
+							break;
+						}
 					}
 				}
+				listFasta.add(new Fasta(header, seq, sourcefile, taxon, tfactor));			
 			}
-			listFasta.add(new Fasta(header, seq, sourcefile, taxon, tfactor));			
+		}
+		else { //other format
+			String[] strarray = fastaFile.get(0).trim().split(" ");
+			int countofSeqs = Integer.parseInt(strarray[0]);
+			System.out.println("Count of Seqs = " + countofSeqs);
+			for(int i = 1; i <= countofSeqs; i++) {
+				String header = fastaFile.get(i).substring(0, fastaFile.get(i).indexOf(" "));
+				String seq = fastaFile.get(i).substring(header.length()).replace(" ", "");
+				System.out.println(header);
+				for(int j = i + countofSeqs; j < fastaFile.size(); j += countofSeqs) {
+					seq += fastaFile.get(j).replace(" ", "");
+				}
+				System.out.println(seq);
+				String taxon, tfactor; 
+				if(header.startsWith("Gorilla_gorilla_gorilla")) {
+					taxon = "Gorilla_gorilla_gorilla";
+				}
+				else if(header.startsWith("Gorilla_gorilla")) {
+					taxon = "Gorilla_gorilla";
+				}
+				else if(header.startsWith("Canis_lupus_familiaris")) {
+					taxon = "Canis_lupus_familiaris";
+				}
+				else if(header.startsWith("Mustela_putorius_furo")) {
+					taxon = "Mustela_putorius_furo";
+				}
+				else {
+					String[] strarray2 = header.split("_");
+					taxon = strarray2[0] + "_" + strarray2[1];
+				}
+				tfactor = header.substring(taxon.length()+1, header.length()-3);//Starting after Taxon and removing _ma from end	
+				if(tfactor.endsWith("-DBD")) {//Removing -DBD
+					tfactor = tfactor.substring(0,tfactor.length() - 4);
+				}
+				if(tfactor.contains("-annot")) {
+					tfactor = tfactor.replace("-annot","");
+				}
+				if(TFactortoID.containsKey(tfactor)) { //Mapping tfactor to id
+					tfactor = TFactortoID.get(tfactor);
+				}
+				else { //Removing last .X until it matches an entry in the map. Otherwise use original tfactor
+					String temp = tfactor;
+					while(temp.lastIndexOf(".") != -1) {
+						temp = temp.substring(0, temp.lastIndexOf("."));
+						System.out.println(temp);
+						if(TFactortoID.containsKey(temp)) {
+							tfactor = TFactortoID.get(temp);
+							break;
+						}
+					}
+				}
+				listFasta.add(new Fasta(header, seq, sourcefile, taxon, tfactor));						
+			}
 		}
 		return listFasta;
 	}

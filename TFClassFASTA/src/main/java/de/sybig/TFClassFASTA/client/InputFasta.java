@@ -1,11 +1,15 @@
 package de.sybig.TFClassFASTA.client;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Comparator;
 import java.util.List;
@@ -53,7 +57,7 @@ public class InputFasta
 		File[] dbdDirs = dbdTreeDir.listFiles(File::isDirectory);
 		for(File dbdDir : dbdDirs) {
 			if(!dbdDir.getName().equals("0")) {
-			//	searchDBDTree(dbdDir);
+				searchDBDTree(dbdDir);
 			}
 		}
 		System.out.println("Adding data in " + protTreeDir.getName());
@@ -264,7 +268,16 @@ public class InputFasta
 			ZipEntry entry = zipFile.getEntry(fileName);
 			InputStream iStream = zipFile.getInputStream(entry);
 			Path tempFile = Files.createTempFile("TFClassTempFile",".tmp");
-			Files.copy(iStream, tempFile, StandardCopyOption.REPLACE_EXISTING);
+			BufferedReader in = new BufferedReader(new InputStreamReader(iStream));
+			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(tempFile.toFile())));
+			String line = null;
+			while((line = in.readLine()) != null) {
+				if(!line.isEmpty()) {
+					out.println(line);
+				}
+			}
+			in.close();
+			out.close();
 			System.out.println("Adding file " + fileName + " to DB");
 			Matcher matcher = pat.matcher(fileName);
 			if(!matcher.find()) {
@@ -282,6 +295,7 @@ public class InputFasta
 			multiPart.field("type", type);
 			multiPart.field("align", align);
 			multiPart.field("tfclassid", tfclassID);
+			multiPart.field("source", fileName);
 			multiPart.bodyPart(filePart);
 			
 			Response response = target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
@@ -312,6 +326,7 @@ public class InputFasta
 			multiPart.field("type", type);
 			multiPart.field("align", align);
 			multiPart.field("tfclassid", tfclassID);
+			multiPart.field("source", file.getName());
 			multiPart.bodyPart(filePart);
 			
 			Response response = target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
