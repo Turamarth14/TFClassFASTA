@@ -7,7 +7,10 @@ import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.WebApplicationException;
@@ -23,7 +26,25 @@ import de.sybig.TFClassFASTA.db.MetaFileDAO;
 @Provider
 @Consumes(MediaType.MULTIPART_FORM_DATA)
 public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
-
+	private static final Map<String,String> TFactortoID;
+	static {
+		Map<String, String> tempMap = new HashMap<>();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(FastaUnmarshaller.class.getClassLoader().getResourceAsStream("IDs_all.csv")));
+			String line = null;
+			while((line = in.readLine()) != null) {
+				String[] strarray = line.split(";");
+				if(strarray.length >= 2) {
+					tempMap.put(strarray[1], strarray[0]);
+				}
+			}
+			in.close();
+		}
+		catch(IOException e) {
+			System.out.println(e.getMessage());
+		}
+		TFactortoID = Collections.unmodifiableMap(tempMap);
+	}
 	private final MetaFileDAO metafileDAO;
 	
 	public FastaUnmarshaller(MetaFileDAO metafileDAO) {
@@ -44,9 +65,9 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 		List<Fasta> listFasta = new ArrayList<>();
 		List<String> fastaFile = new ArrayList<>();
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-		String line, type, align, desc, tfclassID,source;
+		String line, type, align, tfclassID,source;
 		Long version;
-		line = type = align = desc = tfclassID = source = null;
+		line = type = align = tfclassID = source = null;
 		while((line = in.readLine()) != null) {
 			System.out.println(line);
 			if(!line.startsWith("Content-Disposition")) {
@@ -110,21 +131,36 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 				i++;
 			}
 			String taxon, tfactor; 
-			if(header.startsWith(">Gorilla")) {
+			if(header.startsWith(">Gorilla_gorilla_gorilla")) {
+				taxon = "Gorilla_gorilla_gorilla";
+			}
+			else if(header.startsWith(">Gorilla gorilla ")) {
 				taxon = "Gorilla_gorilla";
 			}
 			else {
 				String[] strarray = header.split("_");
 				taxon = strarray[0].substring(1) + "_" + strarray[1];
 			}
-			if(header.startsWith(">Gorilla_gorilla_gorilla")) {//Starting after Taxon and removing _ma from end
-				tfactor = header.substring(25, header.length()-3);
-			}
-			else {	
-				tfactor = header.substring(taxon.length()+2, header.length()-3);
-			}
+			tfactor = header.substring(taxon.length()+2, header.length()-3);//Starting after Taxon and removing _ma from end	
 			if(tfactor.endsWith("-DBD")) {//Removing -DBD
 				tfactor = tfactor.substring(0,tfactor.length() - 4);
+			}
+			if(tfactor.contains("-annot")) {
+				tfactor = tfactor.replace("-annot","");
+			}
+			if(TFactortoID.containsKey(tfactor)) { //Mapping tfactor to id
+				tfactor = TFactortoID.get(tfactor);
+			}
+			else { //Removing last .X until it matches an entry in the map. Otherwise use original tfactor
+				String temp = tfactor;
+				while(temp.lastIndexOf(".") != -1) {
+					temp = temp.substring(0, temp.lastIndexOf("."));
+					System.out.println(temp);
+					if(TFactortoID.containsKey(temp)) {
+						tfactor = TFactortoID.get(temp);
+						break;
+					}
+				}
 			}
 			listFasta.add(new Fasta(header, seq, sourcefile, taxon, tfactor));			
 		}
