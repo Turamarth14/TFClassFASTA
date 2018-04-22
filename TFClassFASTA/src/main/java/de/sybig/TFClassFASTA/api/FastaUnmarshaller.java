@@ -120,8 +120,8 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 				String header = fastaFile.get(i);
 				String seq = fastaFile.get(i+1);
 				i += 2;
-				System.out.println(i);
-				System.out.println(header);
+				//System.out.println(i);
+				//System.out.println(header);
 				//System.out.println(seq);
 				while(i < fastaFile.size() && !fastaFile.get(i).startsWith(">")) {
 					seq += fastaFile.get(i);
@@ -175,11 +175,11 @@ public class FastaUnmarshaller implements MessageBodyReader<List<Fasta>>{
 			for(int i = 1; i <= countofSeqs; i++) {
 				String header = fastaFile.get(i).substring(0, fastaFile.get(i).indexOf(" "));
 				String seq = fastaFile.get(i).substring(header.length()).replace(" ", "");
-				System.out.println(header);
+				//System.out.println(header);
 				for(int j = i + countofSeqs; j < fastaFile.size(); j += countofSeqs) {
 					seq += fastaFile.get(j).replace(" ", "");
 				}
-				System.out.println(seq);
+				//System.out.println(seq);
 				String taxon, tfactor; 
 				if(header.startsWith("Gorilla_gorilla_gorilla")) {
 					taxon = "Gorilla_gorilla_gorilla";
